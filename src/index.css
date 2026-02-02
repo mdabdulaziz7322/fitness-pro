@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import "tailwindcss";
+@plugin "daisyui";
+
+.inter-font {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  color: white !important;
+}
+
+@import "simplebar-react/dist/simplebar.min.css";
+
+/* Make SimpleBar look like mobile (no visible scrollbar) */
+.simplebar-scrollbar::before {
+  background: transparent;
+}
