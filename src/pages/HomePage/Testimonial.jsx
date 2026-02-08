@@ -1,5 +1,5 @@
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from "swiper/modules";
+import { Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -66,7 +66,7 @@ const testimonials = [
 const Testimonial = () => {
     return (
         <section className="w-full  py-20 px-6">
-           
+
             <div className="max-w-7xl mx-auto">
 
                 {/* Title */}
@@ -76,10 +76,14 @@ const Testimonial = () => {
 
 
                 <Swiper
-                    modules={[Pagination]}
+                    modules={[Pagination, Autoplay]}
                     spaceBetween={24}
                     speed={700}
                     pagination={{ clickable: true }}
+                    autoplay={{
+                        delay: 3000,   // 3 seconds per slide
+                        disableOnInteraction: false, // keeps autoplay after user interacts
+                    }}
                     breakpoints={{
                         0: { slidesPerView: 1 },
                         768: { slidesPerView: 2 },

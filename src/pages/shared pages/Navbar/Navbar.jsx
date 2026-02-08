@@ -1,17 +1,28 @@
 import { useState } from "react";
-import { UserCircle, Menu, X } from "lucide-react"; 
+import { UserCircle, Menu, X } from "lucide-react";
 import { Link, NavLink, useNavigate } from "react-router";
+import UseAuth from "../../../hooks/UseAuth";
 
-const Navbar = ({ user }) => {
+const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const { user, signOutUser } = UseAuth();
 
   const handleProfileClick = () => {
     if (!user) {
       navigate("/signin");
     } else {
       setOpen(!open);
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await signOutUser();  // 👈 sign out first
+      navigate("/");        // then go home
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -37,10 +48,9 @@ const Navbar = ({ user }) => {
               key={idx}
               to={link.path}
               className={({ isActive }) =>
-                `font-black text-sm ${
-                  isActive
-                    ? "text-gray-600"
-                    : "text-gray-800 hover:text-gray-600"
+                `font-black text-sm ${isActive
+                  ? "text-gray-600"
+                  : "text-gray-800 hover:text-gray-600"
                 }`
               }
             >
@@ -57,14 +67,14 @@ const Navbar = ({ user }) => {
           <UserCircle className="w-7 h-7 text-gray-800 hover:text-gray-600" />
         </button>
 
-         <div className="flex-1 flex justify-center md:justify-start">
-        <Link
-          to="/membership"
-          className="px-4 py-4 bg-gray-800 text-white text-sm hover:bg-gray-700 transition hidden sm:inline-block"
-        >
-          Become a Member
-        </Link>
-      </div>
+        <div className="flex-1 flex justify-center md:justify-start">
+          <Link
+            to="/membership"
+            className="px-4 py-3 bg-gray-800 text-white text-sm hover:bg-gray-700 transition hidden sm:inline-block"
+          >
+            Become a Member
+          </Link>
+        </div>
 
         {/* Hamburger Menu - visible on small screens */}
         <button
@@ -78,7 +88,7 @@ const Navbar = ({ user }) => {
           )}
         </button>
 
-       
+
         {/* Dropdown Menu (profile) */}
         {user && open && (
           <div className="absolute right-0 top-12 w-40 bg-white shadow-lg rounded-md overflow-hidden z-20">
@@ -92,9 +102,12 @@ const Navbar = ({ user }) => {
             <Link
               to="/dashboard"
               className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-              onClick={() => setOpen(false)}
+              onClick={() => {
+                setOpen(false);    // close menu
+                handleSignOut();   // sign out
+              }}
             >
-              Dashboard
+              Sign Out
             </Link>
           </div>
         )}
@@ -108,10 +121,9 @@ const Navbar = ({ user }) => {
               key={idx}
               to={link.path}
               className={({ isActive }) =>
-                `font-bold text-lg ${
-                  isActive
-                    ? "text-gray-600"
-                    : "text-gray-800 hover:text-gray-600"
+                `font-bold text-lg ${isActive
+                  ? "text-gray-600"
+                  : "text-gray-800 hover:text-gray-600"
                 }`
               }
               onClick={() => setMenuOpen(false)}
@@ -123,7 +135,7 @@ const Navbar = ({ user }) => {
           {/* Become a Member (mobile) */}
           <Link
             to="/membership"
-            className="px-6 py-2 bg-gray-800 text-white hover:bg-indigo-700 transition rounded"
+            className="px-6 py-2 bg-gray-800 text-white hover:bg-gray-700 transition rounded"
             onClick={() => setMenuOpen(false)}
           >
             Become a Member
